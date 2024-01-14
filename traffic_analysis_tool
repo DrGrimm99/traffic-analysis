@@ -1,11 +1,16 @@
 import scapy.all as scapy
 
+def packet_summary(packet):
+    return f"Source IP: {packet[scapy.IP].src}, Destination IP: {packet[scapy.IP].dst}, Protocol: {packet[scapy.IP].proto}"
+
+def packet_details(packet):
+    return f"Packet Details:\n{packet.show()}"
+
 def packet_callback(packet):
     if packet.haslayer(scapy.IP):
-        ip_src = packet[scapy.IP].src
-        ip_dst = packet[scapy.IP].dst
-        protocol = packet[scapy.IP].proto
-        print(f"Source IP: {ip_src}, Destination IP: {ip_dst}, Protocol: {protocol}")
+        print(packet_summary(packet))
+        print(packet_details(packet))
+        print("-" * 50)
 
 def capture_packets(interface):
     scapy.sniff(iface=interface, store=False, prn=packet_callback)
