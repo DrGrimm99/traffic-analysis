@@ -1,0 +1,23 @@
+import scapy.all as scapy
+
+def packet_callback(packet):
+    if packet.haslayer(scapy.IP):
+        ip_src = packet[scapy.IP].src
+        ip_dst = packet[scapy.IP].dst
+        protocol = packet[scapy.IP].proto
+        print(f"Source IP: {ip_src}, Destination IP: {ip_dst}, Protocol: {protocol}")
+
+def capture_packets(interface):
+    scapy.sniff(iface=interface, store=False, prn=packet_callback)
+
+def main():
+    print("Traffic Analysis Tool")
+    interface = input("Enter the network interface for packet capture: ")
+
+    try:
+        capture_packets(interface)
+    except KeyboardInterrupt:
+        print("\nExiting...")
+
+if __name__ == "__main__":
+    main()
